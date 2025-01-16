@@ -49,8 +49,19 @@ set_var EASYRSA_ALGO "ec"
 set_var EASYRSA_DIGEST "sha512"
 ```
 
+This file is used by easyrsa to create your PKI.  This PKI is just used here as a place to store certificates as the actual validation and signing will be dont by the CA server we setup in step 2.
+
+```bash
+$ ./easyrsa init-pki
+```
+
 <h2>Setting Up CA (Certificate Authority) Server</h2>
 
+A Certificate Authority server is a server whos sole purpose is to issue digital certificates to verify clients on the internet. This is a popular and secure way to allow your OpenVPN server to trust the clients that connect to it and vice-versa.  For my CA server, I used WSL on my home desktop.  My WSL is using Ubuntu 24.04, just like my OpenVPN server.
+
+The first steps are very similar to what we did above.
+
+Install Easy-RSA
 
 <h2>Creating and Signing Certificate</h2>
 
