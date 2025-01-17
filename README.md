@@ -17,4 +17,4 @@ Easy-RSA is a software tool used to create and manage a PKI (Public Key Infrastr
 <ins>CA Server</ins><br/>
 A Certificate Authority Server is a server that handles issuing, revoking, and managing of digital certificates for our Easy-RSA PKI. In this project I use my CA Server to issue and validate certificates for my server and clients.
 
-*NOTE* - Not all files generated and needed to run the VPN are included in this repository. There are simply too many files across too many machines to assemble them all here.  The files included are more of the important proof of concept ones I felt needed to be included. Thank you!
+<ins>\*NOTE\* - Not all files generated and needed to run the VPN are included in this repository. There are simply too many files across too many machines to assemble them all here.  The files included are more of the important proof of concept ones I felt needed to be included. Thank you!</ins>
