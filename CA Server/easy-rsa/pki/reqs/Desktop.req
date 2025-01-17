@@ -1,0 +1,198 @@
+##############################################
+# Sample client-side OpenVPN 2.6 config file #
+# for connecting to multi-client server.     #
+#                                            #
+# This configuration can be used by multiple #
+# clients, however each client should have   #
+# its own cert and key files.                #
+#                                            #
+# On Windows, you might want to rename this  #
+# file so it has a .ovpn extension           #
+##############################################
+
+# Specify that we are a client and that we
+# will be pulling certain config file directives
+# from the server.
+client
+
+# Use the same setting as you are using on
+# the server.
+# On most systems, the VPN will not function
+# unless you partially or fully disable
+# the firewall for the TUN/TAP interface.
+;dev tap
+dev tun
+
+# Windows needs the TAP-Win32 adapter name
+# from the Network Connections panel
+# if you have more than one.  On XP SP2,
+# you may need to disable the firewall
+# for the TAP adapter.
+;dev-node MyTap
+
+# Are we connecting to a TCP or
+# UDP server?  Use the same setting as
+# on the server.
+;proto tcp
+proto udp
+
+# The hostname/IP and port of the server.
+# You can have multiple remote entries
+# to load balance between the servers.
+remote 183.159.2.197 1194 *Changed for privacy*
+;remote my-server-2 1194
+
+# Choose a random host from the remote
+# list for load-balancing.  Otherwise
+# try hosts in the order specified.
+;remote-random
+
+# Keep trying indefinitely to resolve the
+# host name of the OpenVPN server.  Very useful
+# on machines which are not permanently connected
+# to the internet such as laptops.
+; resolv-retry infinite
+
+# Most clients don't need to bind to
+# a specific local port number.
+nobind
+
+# Downgrade privileges after initialization (non-Windows only)
+; user nobody
+; group nobody
+
+# Try to preserve some state across restarts.
+persist-key
+persist-tun
+
+# If you are connecting through an
+# HTTP proxy to reach the actual OpenVPN
+# server, put the proxy server/IP and
+# port number here.  See the man page
+# if your proxy server requires
+# authentication.
+;http-proxy-retry # retry on connection failures
+;http-proxy [proxy server] [proxy port #]
+
+# Wireless networks often produce a lot
+# of duplicate packets.  Set this flag
+# to silence duplicate packet warnings.
+;mute-replay-warnings
+
+# SSL/TLS parms.
+# See the server config file for more
+# description.  It's best to use
+# a separate .crt/.key file pair
+# for each client.  A single ca
+# file can be used for all clients.
+ca ca.crt
+cert client.crt
+key client.key
+
+# Verify server certificate by checking that the
+# certificate has the correct key usage set.
+# This is an important precaution to protect against
+# a potential attack discussed here:
+#  http://openvpn.net/howto.html#mitm
+#
+# To use this feature, you will need to generate
+# your server certificates with the keyUsage set to
+#   digitalSignature, keyEncipherment
+# and the extendedKeyUsage to
+#   serverAuth
+# EasyRSA can do this for you.
+remote-cert-tls server
+
+# Allow to connect to really old OpenVPN versions
+# without AEAD support (OpenVPN 2.3.x or older)
+# This adds AES-256-CBC as fallback cipher and
+# keeps the modern ciphers as well.
+;data-ciphers AES-256-GCM:AES-128-GCM:?CHACHA20-POLY1305:AES-256-CBC
+cipher AES-256-GCM
+auth SHA256
+
+# If a tls-auth key is used on the server
+# then every client must also have the key.
+;tls-auth ta.key 1
+
+# Set Key Direction for TLS authentication
+key-direction 1
+
+# Options for DNS resolution (Not using systemd-resolved)
+; script-security 2
+; up /etc/openvpn/update-resolv-conf
+; down /etc/openvpn/update-resolv-conf
+
+# (Using systemd-resolved)
+; script-security 2
+; up /etc/openvpn/update-systemd-resolved
+; down /etc/openvpn/update-systemd-resolved
+; down-pre
+; dhcp-option DOMAIN-ROUTE .
+
+# Set log file verbosity.
+verb 3
+
+# Silence repeating messages
+;mute 20
+<ca>
+-----BEGIN CERTIFICATE-----
+*Omitted for privacy*
+-----END CERTIFICATE-----
+</ca>
+<cert>
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            8c:2d:bb:5f:c2:55:11:ab:f4:19:ef:2d:90:75:b3:d7 *Changed for privacy*
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN=Easy-RSA CA
+        Validity
+            Not Before: Jan  5 21:41:46 2025 GMT
+            Not After : Apr 10 21:41:46 2027 GMT
+        Subject: CN=Desktop
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (384 bit)
+                pub:
+                    04:1d:b1:4c:bb:bb:56:df:ed:d8:85:1a:8a:cf:2b:
+                    6e:87:38:bf:8a:d4:91:8e:30:57:b9:af:bc:03:9c:
+                    *Trunacted and changed for privacy*
+                ASN1 OID: secp384r1
+                NIST CURVE: P-384
+        X509v3 extensions:
+            X509v3 Basic Constraints:
+                CA:FALSE
+            X509v3 Subject Key Identifier:
+                D3:5D:50:DF:AA:4D:0D:80:6E:59:A7:3B:72:6D:32:41:FF:1E:14:6A *Changed for privacy*
+            X509v3 Authority Key Identifier:
+                keyid:8B:DD:B8:91:D8:1E:96:80:B7:69:DF:75:E0:BB:B9:BE:7E:08:B6:5A *Changed for privacy*
+                DirName:/CN=Easy-RSA CA
+                serial:03:D7:AD:95:86:6D:92:60:7C:AA:6D:9A:34:5C:32:53:F5:4R:19:F9 *Changed for privacy*
+            X509v3 Extended Key Usage:
+                TLS Web Client Authentication
+            X509v3 Key Usage:
+                Digital Signature
+    Signature Algorithm: sha256WithRSAEncryption
+    Signature Value:
+        98:f3:db:46:8d:9e:dx:e3:e3:a4:9e:00:8b:7p:48:67:c9:85:
+        1e:1d:60:d5:28:ac:51:5a:c8:35:97:ba:4d:76:29:fg:df:16:
+        *Trunacted and changed for privacy*
+-----BEGIN CERTIFICATE-----
+*Omitted for privacy*
+-----END CERTIFICATE-----
+</cert>
+<key>
+-----BEGIN PRIVATE KEY-----
+*Omitted for privacy*
+-----END PRIVATE KEY-----
+</key>
+<tls-crypt>
+#
+# 2048 bit OpenVPN static key
+#
+-----BEGIN OpenVPN Static key V1-----
+*Omitted for privacy*
+-----END OpenVPN Static key V1-----
+</tls-crypt>
